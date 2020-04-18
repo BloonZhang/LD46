@@ -39,13 +39,13 @@ public class Draggable : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDra
     }
 
     public void OnEndDrag(PointerEventData eventData) {
-        Debug.Log("OnEndDrag");
+        //Debug.Log("OnEndDrag");
         // Turn raycasts back on
         GetComponent<CanvasGroup>().blocksRaycasts = true;
 
         //Debug.Log(parentToSnapTo.GetComponent<DropZone>().ContainsPoint(this.transform.position));
-        Debug.Log("this tranform position is: " + this.transform.position);
-        parentToSnapTo.GetComponent<DropZone>().DebugMe();
+        //Debug.Log("this tranform position is: " + this.transform.position);
+        //parentToSnapTo.GetComponent<DropZone>().DebugMe();
         this.transform.SetParent(parentToSnapTo);
         this.transform.position = pointToSnapTo;
     }
