@@ -20,13 +20,9 @@ public class DropZone : MonoBehaviour, IDropHandler
     // Start is called before the first frame update
     void Start()
     {
-        /*
-        Rect myRect = GetComponent<RectTransform>().rect;
-        leftEdge = myRect.xMin;
-        rightEdge = myRect.xMax;
-        topEdge = myRect.yMin;
-        bottomEdge = myRect.yMax;
-        */
+        // Code for setting acceptableTokens 
+        // based on parent? name?
+        // Also some way to limit number of tokens
     }
 
     // Update is called once per frame
@@ -58,6 +54,7 @@ public class DropZone : MonoBehaviour, IDropHandler
          //return (position.x > leftEdge && position.x < rightEdge && position.y > topEdge && position.y < bottomEdge);
         return GetComponent<BoxCollider2D>().bounds.Contains(position);
     }
+
     // Helper method for determining if a token type is valid
     public bool IsAcceptableToken(Token.TokenType token)
     {

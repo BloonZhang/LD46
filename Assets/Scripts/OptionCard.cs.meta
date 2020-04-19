@@ -1,0 +1,14 @@
+fileFormatVersion: 2
+guid: b00683eacd6dff44eb5f48161bb17e1e
+MonoImporter:
+  externalObjects: {}
+  serializedVersion: 2
+  defaultReferences:
+  - WaterSprite: {fileID: 6461882169310948067, guid: d5cc27d104af4bb43b86377589ed15de,
+      type: 3}
+  - LightSprite: {instanceID: 0}
+  executionOrder: 0
+  icon: {instanceID: 0}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

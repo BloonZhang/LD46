@@ -1,0 +1,26 @@
+fileFormatVersion: 2
+guid: 2706fc05c8199f04c8804f7b6723cbb8
+MonoImporter:
+  externalObjects: {}
+  serializedVersion: 2
+  defaultReferences:
+  - optionCard: {instanceID: 0}
+  - WaterSprite: {fileID: 5462103902409268475, guid: 134d65ad2d6e0574b8ab2784187884bc,
+      type: 3}
+  - LightSprite: {fileID: 1436194605792042937, guid: 7a1dadd9eb910cc4d922e57e24100bf2,
+      type: 3}
+  - NutrientSprite: {fileID: 6114445676775135387, guid: 3b51a682cccf6734eb361ced47729daa,
+      type: 3}
+  - MoneySprite: {fileID: 4226360750169232971, guid: ad9fc1e564a7c3243a507d0b28167c8d,
+      type: 3}
+  - LegalRepSprite: {fileID: 596048978752126443, guid: b552e0f14a2c5d542bd8c3509f4f46f0,
+      type: 3}
+  - FoodSprite: {fileID: 3922738824847099558, guid: 2b47beb4663228146b6467009114ae97,
+      type: 3}
+  - HungerSprite: {fileID: 8274621742644036032, guid: 0c5b65ed9c1afb141a73bdf81eb2db45,
+      type: 3}
+  executionOrder: 0
+  icon: {instanceID: 0}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
