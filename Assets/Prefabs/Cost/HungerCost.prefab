@@ -7,6 +7,12 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 968725549567811865, guid: d5cc27d104af4bb43b86377589ed15de,
+        type: 3}
+      propertyPath: m_Sprite
+      value: 
+      objectReference: {fileID: 21300000, guid: 8f7a89e2270a00f459cde435a9baed05,
+        type: 3}
     - target: {fileID: 1665516328856670687, guid: d5cc27d104af4bb43b86377589ed15de,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -115,7 +121,7 @@ PrefabInstance:
     - target: {fileID: 6461882169310948067, guid: d5cc27d104af4bb43b86377589ed15de,
         type: 3}
       propertyPath: m_Name
-      value: CostTemplatePrefab
+      value: HungerCost
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: d5cc27d104af4bb43b86377589ed15de, type: 3}

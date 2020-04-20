@@ -29,7 +29,7 @@ public class Draggable : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDra
         GetComponent<CanvasGroup>().blocksRaycasts = false;
         // Get initial parent and move upwards in heirarchy
         parentToSnapTo = this.transform.parent;
-        this.transform.SetParent(this.transform.parent.parent);
+        this.transform.SetParent(GameObject.FindWithTag("MainCanvas").transform);
     }
 
     public void OnDrag(PointerEventData eventData) {

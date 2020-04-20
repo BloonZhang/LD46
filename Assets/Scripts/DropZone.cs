@@ -7,7 +7,11 @@ public class DropZone : MonoBehaviour, IDropHandler
 {
 
     // Public variables
-    public Token.TokenType[] acceptableTokens;
+    public Token.TokenType[] typesOfAcceptableTokens;
+
+    // Private variables
+    //private int[] acceptableTokens = new int[7]; // numbers of acceptable tokens for each type
+    //private int[] tokensOnZone = new int[7]; // number of tokens already in the zone
 
     // Info about bounds
     /*
@@ -23,6 +27,7 @@ public class DropZone : MonoBehaviour, IDropHandler
         // Code for setting acceptableTokens 
         // based on parent? name?
         // Also some way to limit number of tokens
+
     }
 
     // Update is called once per frame
@@ -58,9 +63,9 @@ public class DropZone : MonoBehaviour, IDropHandler
     // Helper method for determining if a token type is valid
     public bool IsAcceptableToken(Token.TokenType token)
     {
-        for (int i = 0; i < acceptableTokens.Length; ++i)
+        for (int i = 0; i < typesOfAcceptableTokens.Length; ++i)
         {
-            if (acceptableTokens[i] == token) {return true;}
+            if (typesOfAcceptableTokens[i] == token) {return true;}
         }
         return false;
     }
