@@ -11,6 +11,7 @@ public class OptionCard : ScriptableObject
     public string cardName;
     public Token.TokenType[] cost;
     public Token.TokenType[] reward;
+    public EventCard cardReward;
 
     // test method
     public void Print ()

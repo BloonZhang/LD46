@@ -13,6 +13,7 @@ public class EventCard : ScriptableObject
     public string description;
     public Image art;
     public OptionCard[] options;
+    public string season;
 
     // test method
     public void Print ()

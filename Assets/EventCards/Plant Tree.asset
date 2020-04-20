@@ -17,3 +17,4 @@ MonoBehaviour:
   art: {fileID: 0}
   options:
   - {fileID: 11400000, guid: 788acf1db6db35d4c96b1989770ccf67, type: 2}
+  season: Spring

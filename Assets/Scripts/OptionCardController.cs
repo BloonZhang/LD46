@@ -3,31 +3,42 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.EventSystems; // IPointerClickHandler
 using TMPro;
 
 
 
-public class OptionCardController : MonoBehaviour
+public class OptionCardController : MonoBehaviour, IPointerClickHandler
 {
     // public variables
     public OptionCard optionCard;
+    public Image cardGlow;
     public TextMeshProUGUI cardName;
     public LayoutGroup costLayout;
     public LayoutGroup rewardsLayout;
+    public TextMeshProUGUI rewardText;
     public OptionCardDropZone myDropZone;
 
     // private variables
     private int[] tokensOnMe = new int[7]; // each index corresponds with an tokentype enum
     private int[] requiredTokens = new int[7];
+    private int[] rewardsArray = new int[7];
+    private bool paidOff;
+
+    // helper variables
 
     // GameObjects for Cost
-    public GameObject WaterSprite;
-    public GameObject LightSprite;
-    public GameObject NutrientSprite;
-    public GameObject MoneySprite;
-    public GameObject LegalRepSprite;
-    public GameObject FoodSprite;
-    public GameObject HungerSprite;
+    /*
+    0: WATER
+    1: LIGHT
+    2: NUTRIENT
+    3: MONEY
+    4: LEGALREP
+    5: FOOD
+    6: HUNGER
+    */
+    public GameObject[] CostSprites = new GameObject[7];
+    public GameObject[] RewardTokens = new GameObject[7];
 
     void Start()
     {
@@ -36,105 +47,54 @@ public class OptionCardController : MonoBehaviour
         // set up text and costs and such
         cardName.text = optionCard.cardName;
         setUpLayout();
+        paidOff = false;
+        cardGlow.enabled = false;
+
+        //giveRewards();
 
     }
 
     void Update()
     {
         tokensOnMe = myDropZone.checkTokens();
-        
-        if (checkIfPaid()) {Debug.Log("paid");}
+
+        // Control card glow if paid
+        paidOff = checkIfPaid();
+        cardGlow.enabled = paidOff;
+
     }
 
-    // helper function, sets up cost and reward spirtes
-    // Also sets up rqeuiredTokens array
-    void setUpLayout()
+    // When clicked
+    public void OnPointerClick(PointerEventData eventData)
     {
-        foreach(Token.TokenType token in optionCard.cost)
+        if (paidOff)
         {
-            /*
-            0: WATER
-            1: LIGHT
-            2: NUTRIENT
-            3: MONEY
-            4: LEGALREP
-            5: FOOD
-            6: HUNGER
-            */
-            switch ((int)token)
-            {
-                case 0:
-                    Instantiate(WaterSprite, costLayout.transform);
-                    ++requiredTokens[(int)Token.TokenType.WATER];
-                    break;
-                case 1:
-                    Instantiate(LightSprite, costLayout.transform);
-                    ++requiredTokens[(int)Token.TokenType.LIGHT];
-                    break;
-                case 2:
-                    Instantiate(NutrientSprite, costLayout.transform);
-                    ++requiredTokens[(int)Token.TokenType.NUTRIENT];
-                    break;
-                case 3:
-                    Instantiate(MoneySprite, costLayout.transform);
-                    ++requiredTokens[(int)Token.TokenType.MONEY];
-                    break;
-                case 4:
-                    Instantiate(LegalRepSprite, costLayout.transform);
-                    ++requiredTokens[(int)Token.TokenType.LEGALREP];
-                    break;
-                case 5:
-                    Instantiate(FoodSprite, costLayout.transform);
-                    ++requiredTokens[(int)Token.TokenType.FOOD];
-                    break;
-                case 6:
-                    Instantiate(HungerSprite, costLayout.transform);
-                    ++requiredTokens[(int)Token.TokenType.HUNGER];
-                    break;
-                default:
-                    break;
-            }
-        }
-        foreach(Token.TokenType token in optionCard.reward)
-        {
-            switch ((int)token)
-            {
-                case 0:
-                    Instantiate(WaterSprite, rewardsLayout.transform);
-                    break;
-                case 1:
-                    Instantiate(LightSprite, rewardsLayout.transform);
-                    break;
-                case 2:
-                    Instantiate(NutrientSprite, rewardsLayout.transform);
-                    break;
-                case 3:
-                    Instantiate(MoneySprite, rewardsLayout.transform);
-                    break;
-                case 4:
-                    Instantiate(LegalRepSprite, rewardsLayout.transform);
-                    break;
-                case 5:
-                    Instantiate(FoodSprite, rewardsLayout.transform);
-                    break;
-                case 6:
-                    Instantiate(HungerSprite, rewardsLayout.transform);
-                    break;
-                default:
-                    break;
-            }
+            giveRewards();
+            Debug.Log("rewards!");
+            //TODO: remove all attached tokens
+            //TODO: remove card
         }
     }
 
-    // helper funcion, see if all costs are paid off
+
+
+    // See if all costs are paid off
     bool checkIfPaid()
     {
         int difference = 0;
+        int extraLegalRep = 0;
         // go through each type of resource execept legalRep
         for (int i = 0; i < Enum.GetValues(typeof(Token.TokenType)).Length; ++i)
         {
-            // Skip legalRep
-            if (i == (int) Token.TokenType.LEGALREP) {continue;}
+            // legalRep is unique
+            if (i == (int) Token.TokenType.LEGALREP) 
+            {
+                // Too few legal rep
+                if (requiredTokens[i] > tokensOnMe[i]) {return false;}
+                // Calculate extra legal rep
+                else {extraLegalRep = tokensOnMe[i] - requiredTokens[i];}
+                continue;
+            }
 
             // If more than required
             if (tokensOnMe[i] > requiredTokens[i]) {return false;}
@@ -144,5 +104,67 @@ public class OptionCardController : MonoBehaviour
 
         // return true if the difference is made up by LEGALREP
         return (difference - tokensOnMe[(int)Token.TokenType.LEGALREP]) == 0;
+    }
+
+    // Dispenses rewards
+    // NOTE: Gross hardcode. Maybe offset by half of size of token?
+    void giveRewards()
+    {
+        // First five resources
+        // NOTE: hardcoded
+        GameObject resourceZone = GameObject.FindWithTag("ResourceZone");
+        Vector3 baseSpawnPoint = new Vector3(resourceZone.transform.position.x + 35, resourceZone.transform.position.y + 120, 0);
+        int offsetCounter = 0;
+        for (int iTokenType = 0; iTokenType < 5; ++iTokenType)
+        {
+            for (int j = 0; j < rewardsArray[iTokenType]; ++j)
+            {
+                Instantiate(RewardTokens[iTokenType], 
+                    baseSpawnPoint + new Vector3(35 * offsetCounter, 0, 0),
+                    Quaternion.identity, 
+                    resourceZone.transform);
+                ++offsetCounter;
+            }
+        }
+        // Sixth resource, food
+        GameObject foodZone = GameObject.FindWithTag("FoodZone");
+        baseSpawnPoint = new Vector3(foodZone.transform.position.x + 35, foodZone.transform.position.y + 120, 0);
+        offsetCounter = 0;
+        for (int j = 0; j < rewardsArray[5]; ++j)
+        {
+            Instantiate(RewardTokens[5], 
+                baseSpawnPoint + new Vector3(35 * offsetCounter, 0, 0),
+                Quaternion.identity, 
+                foodZone.transform);
+            ++offsetCounter;
+        }
+        // Seventh resource, hunger
+        GameObject hungerZone = GameObject.FindWithTag("HungerZone");
+        baseSpawnPoint = new Vector3(hungerZone.transform.position.x + 35, hungerZone.transform.position.y + 120, 0);
+        offsetCounter = 0;
+        for (int j = 0; j < rewardsArray[6]; ++j)
+        {
+            Instantiate(RewardTokens[6], 
+                baseSpawnPoint + new Vector3(35 * offsetCounter, 0, 0),
+                Quaternion.identity, 
+                hungerZone.transform);
+            ++offsetCounter;
+        }
+    }
+
+    // helper function, sets up cost and reward spirtes
+    // Also sets up rqeuiredTokens array and rewardArray
+    void setUpLayout()
+    {
+        foreach(Token.TokenType token in optionCard.cost)
+        {
+            Instantiate(CostSprites[(int)token], costLayout.transform);
+            ++requiredTokens[(int)token];
+        }
+        foreach(Token.TokenType token in optionCard.reward)
+        {
+            Instantiate(CostSprites[(int)token], rewardsLayout.transform);
+            ++rewardsArray[(int)token];
+        }
     }
 }
